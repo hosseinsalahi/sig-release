@@ -1,0 +1,19 @@
+name: Report remaining open issues
+on: [push]
+  #schedule: 
+  #  - cron: '*/5 * * * *'
+jobs:
+  update_gh_board:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+      - run: |
+          chmod +x "${GITHUB_WORKSPACE}/release-team/hack/sync-bug-triage-github-project-beta.sh"
+          "${GITHUB_WORKSPACE}/release-team/hack/sync-bug-triage-github-project-beta.sh"
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+          PROJECT_NUMBER: ${{ secrets.PROJECT_NUMBER }} 
+          MILESTONE: ${{ secrets.MILESTONE }}
